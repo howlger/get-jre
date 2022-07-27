@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: embedded_jre;singleton:=true
+Bundle-Version: 17.0.3.7_2022-04-23
+Bundle-Localization: bundle
+Bundle-Name: %name
+Bundle-Vendor: %provider
+Automatic-Module-Name: embedded_jre

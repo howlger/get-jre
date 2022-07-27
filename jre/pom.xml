@@ -1,0 +1,100 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>get-jre</groupId>
+	<artifactId>jre-parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<!-- parent to inherit:
+	     - property: ${tycho-version}
+	     - POM-less via .mvn/extensions.xml
+	     - plugin: org.eclipse.tycho:tycho-maven-plugin -->
+	<parent>
+		<groupId>get-jre</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+		<get-jre.version>17</get-jre.version>
+		<get-jre.jdk>yes</get-jre.jdk>
+	</properties>
+	<modules>
+		<module>embedded_jre</module>
+		<module>embedded_jre.win32.x86_64</module>
+		<module>embedded_jre-feature</module>
+		<module>embedded_jre-update-site</module>
+	</modules>
+	<build>
+		<plugins>
+
+            <!-- generate content as follows:
+                 1. ... -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target xmlns:if="ant:if" xmlns:unless="ant:unless">
+
+                                <!-- download and add JRE -->
+                                <condition property="is.jre.win32.x86_64.fragment">
+                                    <equals arg1="${project.artifactId}" arg2="embedded_jre.win32.x86_64"/>
+                                </condition>
+                                <sequential if:set="is.jre.win32.x86_64.fragment">
+
+                                    <!-- download, if not cached -->
+                                    <local name="download"/>
+                                    <property file="${project.basedir}/build.properties"/>
+                                    <echo message="${download}"/>
+                                    <local name="download.basename"/>
+                                    <basename property="download.basename" file="${download}"/>
+                                    <echo message="${download.basename}"/>
+                                    <local name="download.is-cached"/>
+                                    <available property="download.is-cached"
+                                        file="${settings.localRepository}/.cache/JREs/${download.basename}"/>
+                                    <mkdir dir="${settings.localRepository}/.cache/JREs"/>
+                                    <get unless:set="download.is-cached" src="${download}"
+                                        dest="${settings.localRepository}/.cache/JREs/${download.basename}"/>
+
+                                    <!-- include download JRE -->
+                                    <!-- TODO: <checksum file="foo.bar" property="${md5}" verifyProperty="isEqual"/> -->
+                                    <mkdir dir="${project.build.directory}/generated"/>
+                                    <unzip src="${settings.localRepository}/.cache/JREs/${download.basename}"
+                                        dest="${project.build.directory}/generated">
+                                        <patternset><exclude name="*"/></patternset>
+                                        <regexpmapper from="^[^/]++/(.++)$$" to="jre/\1" handledirsep="yes"/>
+                                    </unzip>
+
+                                </sequential>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- add generated content and avoid META-INF/maven/ -->
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+                    <additionalFileSets>
+                        <fileSet>
+                            <directory>${project.build.directory}/generated</directory>
+                        </fileSet>
+                    </additionalFileSets>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

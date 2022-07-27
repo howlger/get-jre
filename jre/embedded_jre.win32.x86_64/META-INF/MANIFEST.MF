@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: embedded_jre.win32.x86_64;singleton:=true
+Bundle-Version: 17.0.3.7_2022-04-23
+Fragment-Host: embedded_jre;bundle-version="[17.0.3,17.0.4)"
+Bundle-Localization: bundle
+Bundle-Name: %name
+Bundle-Vendor: %provider
+Eclipse-BundleShape: dir
+Eclipse-PlatformFilter: (& (osgi.os=win32) (osgi.arch=x86_64))
+Automatic-Module-Name: embedded_jre.win32.x86_64

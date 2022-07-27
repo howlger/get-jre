@@ -1,0 +1,5 @@
+**/target
+/workspace/
+.polyglot.META-INF
+.polyglot.*.xml
+.polyglot.*.target

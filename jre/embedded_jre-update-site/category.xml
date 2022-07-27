@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="embedded_jre" version="0.0.0">
+      <category name="embedded_jre_category"/>
+   </feature>
+   <category-def name="embedded_jre_category" label="Embedded JREs">
+      <description>
+         Embedded JREs/JDKs to run Eclipse with.
+      </description>
+   </category-def>
+</site>

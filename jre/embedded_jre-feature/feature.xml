@@ -1,0 +1,40 @@
+<feature
+      id="embedded_jre"
+      label="%name"
+      version="17.0.3.7_2022-04-23"
+      provider-name="%provider"
+>
+<!--
+      license-feature="org.eclipse.license"
+      license-feature-version="0.0.0"
+-->
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <plugin
+         id="embedded_jre"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="embedded_jre.win32.x86_64"
+         os="win32"
+         arch="x86_64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="true"/>
+
+</feature>
